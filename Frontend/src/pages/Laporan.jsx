@@ -84,7 +84,7 @@ class Laporan extends React.Component {
                         </tr>
                     </thead>
                     {this.state.laporan.map((item, index) => (
-                    <React.Fragment key={id}>
+                    <React.Fragment key={id_user}>
                         <tbody>
                             <tr className="h-10">
                                 <td>{item.jenis}</td>

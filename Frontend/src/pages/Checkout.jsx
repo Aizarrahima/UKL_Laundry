@@ -24,7 +24,7 @@ export default class Checkout extends Component {
         if (localStorage.getItem('token')) {
             this.state.token = localStorage.getItem('token')
             this.state.userName = localStorage.getItem('name')
-            this.state.id_user = localStorage.getItem('id')
+            this.state.id_user = localStorage.getItem('id_user')
         } else {
             window.location = '/signin'
         }

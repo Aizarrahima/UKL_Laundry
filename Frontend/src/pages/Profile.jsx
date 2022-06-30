@@ -10,7 +10,7 @@ class Profile extends Component {
             admin: [],
             isModalOpen: false,
             token: "",
-            adminName: "",
+            userName: "",
             adminId: 0,
             id_admin: 0,
             nama_admin: "",
@@ -20,7 +20,7 @@ class Profile extends Component {
         if (localStorage.getItem('token')) {
             this.state.token = localStorage.getItem('token')
             this.state.adminId = localStorage.getItem('id')
-            // this.state.adminName = localStorage.getItem('admin')
+            // this.state.userName = localStorage.getItem('nama')
         } else {
             window.location = '/signin'
         }

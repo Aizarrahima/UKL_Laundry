@@ -13,17 +13,13 @@ const db = require("../database")
 module.exports = {
     // menambahkan data transaksi sesuai tanggal hari ini
     add: (req, res) => {
-        let day = new Date()
-        var batas = new Date();
-        batas.setDate(batas.getDate()+4)
-        var date = moment(day).format("YYYY-MM-DD");
+        const now = new Date();
+        const batas = new Date();
+        batas.setDate(now.getDate() + 4)
         let data = {
             id_member: req.body.id_member,
-            tgl: date,
+            tgl: now,
             batas_waktu: batas,
-            tgl_bayar: req.body.tgl_bayar,
-            status: req.body.status,
-            dibayar: req.body.dibayar,
             id_user: req.body.id_user,
             total: req.body.total,
         }
@@ -49,19 +45,20 @@ module.exports = {
             subtotal: req.body.subtotal,
         }
         db.query(`insert into detail_transaksi set ?`, detail, (error, results) => {
-            if (err) {
-                return err;
+            if (error) {
+                return error;
+                // console.log(error)
             } else {
                 return res.json({
                     message: "Berhasil menambahkan data",
-                    detail,
+                    results,
                 })
             }
         })
     },
 
     // menampilkan semua data transaksi
-    get: (req, res) => {
+    getTransaksi: (req, res) => {
         db.query(`select * from transaksi`, (err, result) => {
             if (err) throw err;
             const transaksi = result[0].tgl;
@@ -88,8 +85,8 @@ module.exports = {
 
     // hapus data
     delete: (req, res) => {
-        const id = req.params.id_transaksi;
-        db.query(`delete from transaksi where id_transaksi = '${id}'`, (err, results) => {
+        const id_transaksi = req.params.id_transaksi;
+        db.query(`delete from transaksi where id_transaksi = '${id_transaksi}'`, (err, results) => {
             if (null, err) throw err;
             res.json({
                 message: "Success delete data",
@@ -116,9 +113,24 @@ module.exports = {
         })
     },
 
-    // memanggil data total berdasarkan id_transaksi
-    // total: (req, res) => {
-    //     const id = req.params.id_transaksi;
-    //     db.query(`select SUM(subtotal) as total from `)
-    // }
+    // update data
+    update: (req, res) => {
+        const id = req.params.id_transaksi;
+        let data = {
+            status: req.body.status,
+            dibayar: req.body.dibayar,
+        }
+        if (req.body.dibayar === 'dibayar' && !req.body.tgl_bayar) {
+            data.tgl_bayar = new Date();
+        }
+        db.query(`update transaksi set ? where transaksi.id_transaksi = '${id}'`, data, (err, result) => {
+            if (null) throw err;
+            res.json({
+                message: "success update data",
+                data: data
+            })
+        })
+    }
+
+
 }

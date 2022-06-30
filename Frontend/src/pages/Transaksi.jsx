@@ -1,7 +1,8 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import axios from 'axios';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Modal, Button, Form, Badge } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom'
 
 class Transaksi extends React.Component {
     constructor() {
@@ -10,9 +11,10 @@ class Transaksi extends React.Component {
             transaksi: [],
             member: [],
             outlet: [],
+            user: [],
             isModalOpen: false,
             token: "",
-            adminName: "",
+            userName: "",
             id_transaksi: 0,
             id_member: 0,
             id_user: 0,
@@ -24,14 +26,20 @@ class Transaksi extends React.Component {
             total: "",
             nama_member: "",
             nama_user: "",
+            now: new Date(),
             // search: "",
         }
         if (localStorage.getItem('token')) {
-            this.state.token = localStorage.getItem('token')
+            if (localStorage.getItem("role") === "admin" || localStorage.getItem("role") === "kasir") {
+                this.state.token = localStorage.getItem('token')
+                this.state.role = localStorage.getItem('role')
+                this.state.userName = localStorage.getItem('nama')
+            }
         } else {
             window.location = '/signin'
         }
 
+        // this.state.id_transaksi = localStorage.getItem("id_transaksi")
         this.state.id_user = localStorage.getItem("id")
     }
 
@@ -61,6 +69,11 @@ class Transaksi extends React.Component {
             })
     }
 
+    convertTime = (time) => {
+        let date = new Date(time)
+        return `${date.getDate()}-${Number(date.getMonth()) + 1}-${date.getFullYear()}`
+    }
+
     handleDrop = (id) => {
         let url = "http://localhost:8080/transaksi/" + id
         if (window.confirm("Are you sure to delete this transaksi ?")) {
@@ -80,8 +93,7 @@ class Transaksi extends React.Component {
         axios.put(url)
             .then(res => {
                 console.log(res.data.message)
-                
-        })
+            })
     }
 
     // findTransaksi = (event) => {
@@ -105,6 +117,7 @@ class Transaksi extends React.Component {
     // }
 
     handleEdit = (item) => {
+        console.log({ item }, this.state)
         this.setState({
             isModalOpen: true,
             id_transaksi: item.id_transaksi,
@@ -120,20 +133,6 @@ class Transaksi extends React.Component {
         })
     }
 
-    handleAdd = () => {
-        this.setState({
-            isModalOpen: true,
-            id_member: 0,
-            tgl: "",
-            batas_waktu: "",
-            tgl_bayar: "",
-            status: "",
-            dibayar: "",
-            total: 0,
-            action: "insert"
-        })
-    }
-
     handleSave = (e) => {
         e.preventDefault()
         let data = {
@@ -146,28 +145,16 @@ class Transaksi extends React.Component {
             id_user: this.state.id_user,
             total: this.state.total,
         }
-        let url = ""
-        if (this.state.action === "insert") {
-            url = "http://localhost:8080/transaksi"
-            axios.post(url, data)
-                .then(res => {
-                    this.getTransaksi()
-                    this.handleClose()
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-        } else {
-            url = "http://localhost:8080/transaksi/" + this.state.id_transaksi
-            axios.put(url, data)
-                .then(res => {
-                    this.getTransaksi()
-                    this.handleClose()
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-        }
+        console.log(data)
+        let url = "http://localhost:8080/transaksi/" + this.state.id_transaksi
+        axios.put(url, data)
+            .then(res => {
+                this.getTransaksi()
+                this.handleClose()
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     getMember = () => {
@@ -196,23 +183,24 @@ class Transaksi extends React.Component {
             })
     }
 
-    // getUser = () => {
-    //     let url = "http://localhost:8080/user/"
-    //     axios.get(url)
-    //         .then(res => {
-    //             this.setState({
-    //                 user: res.data.data
-    //             })
-    //         })
-    //         .catch(error => {
-    //             console.log(error)
-    //         })
-    // }
+    getUser = () => {
+        let url = "http://localhost:8080/user/"
+        axios.get(url)
+            .then(res => {
+                this.setState({
+                    user: res.data.data
+                })
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
 
     componentDidMount() {
         this.getTransaksi()
         this.getMember()
         this.getOutlet()
+        this.getUser()
     }
 
     render() {
@@ -220,20 +208,26 @@ class Transaksi extends React.Component {
             <div>
                 <Navbar />
                 <div className="container my-2 py-5">
-                    {/* <h1 className="display-6 fw-light text-left">Transaksi { this.state.id_user}</h1> */}
+                    <h1 className="display-6 fw-light text-left">Transaction</h1>
                     <div className="row">
                         {/* <div className="col-6 mb-1">
                             <input type="text" name="search" className="form-control my-5 rounded" placeholder="Search transaksi..." id="search" value={this.state.search} onChange={this.handleChange} onKeyUp={this.findTransaksi} />
                         </div> */}
-                        <div className="col-3 mt-5">
-                            <button className="btn btn-dark" id="btn-blue" onClick={() => this.handleAdd()}>Add Data</button>
-                        </div>
+                        {this.state.role === "admin" &&
+                            <div className="col-3 mt-5">
+                                <NavLink to="/member"><button className="btn btn-dark" id="blue"><i class="fa fa-plus me-2"></i> Add Transaction</button></NavLink>
+                            </div>
+                        }
+                        {this.state.role === "kasir" &&
+                            <div className="col-3 mt-5">
+                                <NavLink to="/member"><button className="btn btn-dark" id="blue">Add Transaction</button></NavLink>
+                            </div>
+                        }
                     </div>
-
 
                     <table className="table">
                         <thead>
-                            <tr>
+                            <tr className="text-center">
                                 <th>Transaksi ID</th>
                                 <th>Member ID</th>
                                 <th>User ID</th>
@@ -249,20 +243,54 @@ class Transaksi extends React.Component {
                         <tbody>
                             {this.state.transaksi.map((item, index) => {
                                 return (
-                                    <tr key={index}>
+                                    <tr key={index} className="text-center">
                                         <td>{item.id_transaksi}</td>
                                         <td>{item.id_member}</td>
                                         <td>{item.id_user}</td>
-                                        <td>{item.tgl}</td>
-                                        <td>{item.batas_waktu}</td>
-                                        <td>{ item.tgl_bayar}</td>
-                                        <td>{item.status}</td>
-                                        <td>{item.dibayar}</td>
+                                        <td>{this.convertTime(item.tgl)}</td>
+                                        <td>{this.convertTime(item.batas_waktu)}</td>
+                                        {item.tgl_bayar !== null &&
+                                            <td>{this.convertTime(item.tgl_bayar)}</td>
+                                        }
+                                        {item.tgl_bayar === null &&
+                                            <td>{item.tgl_bayar}</td>
+                                        }
+                                        <td>
+                                            {item.status === "baru" &&
+                                                <Badge bg="danger">{item.status}</Badge>
+                                            }
+                                            {item.status === "proses" &&
+                                                <Badge bg="warning">{item.status}</Badge>
+                                            }
+                                            {item.status === "selesai" &&
+                                                <Badge bg="info">{item.status}</Badge>
+                                            }
+                                            {item.status === "diambil" &&
+                                                <Badge bg="success">{item.status}</Badge>
+                                            }
+                                        </td>
+                                        <td>
+                                            {item.dibayar === "belum_dibayar" &&
+                                                <Badge bg="danger">Belum Dibayar</Badge>
+                                            }
+                                            {item.dibayar === "dibayar" &&
+                                                <Badge bg="success">Dibayar</Badge>
+                                            }
+                                        </td>
                                         <td>{item.total}</td>
                                         <td>
-                                            <button className="btn btn-sm btn-dark m-1" id="sky" onClick={() => this.handleEdit(item)}><i className="fa fa-pencil"></i></button>
+                                            {this.state.role === "admin" &&
+                                                <span>
+                                                    {item.status === "diambil" && item.dibayar === "dibayar" ? (<button className="btn btn-sm btn-dark m-1" id="blue" onClick={() => this.handleEdit(item)} disabled><i className="fa fa-pencil"></i></button>) : (<button className="btn btn-sm btn-dark m-1" id="blue" onClick={() => this.handleEdit(item)}><i className="fa fa-pencil"></i></button>)}
+                                                </span>
+                                            }
+                                            {this.state.role === "kasir" &&
+                                                <span>
+                                                    {item.status === "diambil" && item.dibayar === "dibayar" ? (<button className="btn btn-sm btn-dark m-1" id="blue" onClick={() => this.handleEdit(item)} disabled><i className="fa fa-pencil"></i></button>) : (<button className="btn btn-sm btn-dark m-1" id="blue" onClick={() => this.handleEdit(item)}><i className="fa fa-pencil"></i></button>)}
+                                                </span>
+                                            }
                                             <button className="btn btn-sm btn-dark m-1" id="light" onClick={() => this.handleDrop(item.id_transaksi)}><i className="fa fa-trash"></i></button>
-                                            <button className="btn btn-sm btn-dark m-1" id="blue" onClick={() => this}>Pilih</button>
+                                            <button className="btn btn-sm btn-dark m-1" id="light"><i class="fa fa-info"></i></button>
                                         </td>
                                     </tr>
                                 )
@@ -272,80 +300,70 @@ class Transaksi extends React.Component {
                     <br></br>
                 </div>
 
-                <Modal show={this.state.isModalOpen} onHide={this.handleClose}>
+                <Modal show={this.state.isModalOpen} onHide={this.handleClose} centered>
                     <Modal.Header closeButton>
-                        <Modal.Title>Transaksi</Modal.Title>
+                        <Modal.Title>Transaction</Modal.Title>
                     </Modal.Header>
                     <Form onSubmit={e => this.handleSave(e)}>
                         <Modal.Body>
-                            <Form.Group className="mb-2" controlId="nama_member">
-                                <Form.Label>Member</Form.Label>
-                                <Form.Select type="text" name="id_member" onChange={this.handleChange} >
-                                    <option value={this.state.id_member}>{this.state.nama_member}</option>
-                                    {this.state.member.map((item, index) => {
-                                        return (
-                                            <option value={item.id_member}>{item.nama_member}</option>
-                                        )
-                                    })}
-                                </Form.Select>
+                            <Form.Group className="mb-2" controlId="name">
+                                <Form.Label>Id Transaksi</Form.Label>
+                                <Form.Control type="text" name="id_transaksi"
+                                    value={this.state.id_transaksi} readOnly />
                             </Form.Group>
-                            <Form.Group className="mb-2" controlId="outlet">
-                                <Form.Label>Outlet</Form.Label>
-                                <Form.Select type="text" name="alamat" onChange={this.handleChange} >
-                                    {this.state.action === "update" &&
-                                        <option value={this.state.id_outlet}>{this.state.alamat}</option>
-                                    }
-                                    {this.state.outlet.map((item, index) => {
-                                        return (
-                                            <option value={item.id_outlet}>{item.alamat}</option>
-                                        )
-                                    })}
-                                </Form.Select>
-                            </Form.Group>
-                            {/* <Form.Group className="mb-2" controlId="nama_user">
-                                <Form.Label>User</Form.Label>
-                                <Form.Select type="text" name="id_member" onChange={this.handleChange} >
-                                    <option value={this.state.id_member}>{this.state.nama_member}</option>
-                                    {this.state.user.map((item, index) => {
-                                        return (
-                                            <option value={item.id_member}>{item.nama_member}</option>
-                                        )
-                                    })}
-                                </Form.Select>
-                            </Form.Group> */}
                             <Form.Group className="mb-2" controlId="tgl">
                                 <Form.Label>Tanggal Transaksi</Form.Label>
-                                <Form.Control type="date" name="tgl" placeholder="Masukkan tanggal sekarang"
-                                    value={this.state.tgl} onChange={this.handleChange} />
+                                <Form.Control type="text" name="tgl"
+                                    value={this.convertTime(this.state.tgl)} readOnly />
                             </Form.Group>
-                            <Form.Group className="mb-2" controlId="batas_waktu">
-                                <Form.Label>Batas Waktu</Form.Label>
-                                <Form.Control type="date" name="batas_waktu" placeholder="Masukkan batas akhir pembayaran"
-                                    value={this.state.batas_waktu} onChange={this.handleChange} />
+                            <Form.Group className="mb-2" controlId="nama_member">
+                                <Form.Label>Nama Member</Form.Label>
+                                <Form.Control type="text" name="nama_member"
+                                    value={this.state.member?.find(item => item.id_member === this.state.id_member)?.nama_member} readOnly />
                             </Form.Group>
-                            <Form.Group className="mb-2" controlId="status">
-                                <Form.Label>Status</Form.Label>
-                                <Form.Select type="text" name="status" onChange={this.handleChange} >
-                                    <option value={this.state.status}>{this.state.status}</option>
-                                    <option value="Baru">Baru</option>
-                                    <option value="Proses">Proses</option>
-                                    <option value="Selesai">Selesai</option>
-                                    <option value="Diambil">Diambil</option>
-                                </Form.Select>
-                            </Form.Group>
-                            <Form.Group className="mb-2" controlId="dibayar">
-                                <Form.Label>Dibayar</Form.Label>
-                                <Form.Select type="text" name="dibayar" onChange={this.handleChange} >
-                                    <option value={this.state.dibayar}>{this.state.dibayar}</option>
+                            <Form.Group className="mb-2" controlId="pembayaran">
+                                <Form.Label>Status Pembayaran</Form.Label>
+                                <Form.Select type="text" name="dibayar" value={this.state.dibayar} onChange={this.handleChange} >
+                                    <option value="" disabled selected></option>
                                     <option value="dibayar">Dibayar</option>
                                     <option value="belum_dibayar">Belum Dibayar</option>
                                 </Form.Select>
                             </Form.Group>
-                            {/* <Form.Group className="mb-2" controlId="total">
-                                <Form.Label>Total</Form.Label>
-                                <Form.Control type="text" name="total" placeholder="Masukkan total yang harus dibayar"
-                                    value={this.state.total} onChange={this.handleChange} />
-                            </Form.Group> */}
+                            <Form.Group className="mb-2" controlId="order">
+                                <Form.Label>Order Status</Form.Label>
+                                <Form.Select type="text" name="status" value={this.state.status} onChange={this.handleChange} >
+                                    <option value="" disabled selected></option>
+                                    <option value="baru">Baru</option>
+                                    <option value="proses">Proses</option>
+                                    <option value="selesai">Selesai</option>
+                                    <option value="diambil">diambil</option>
+                                </Form.Select>
+                            </Form.Group>
+
+                            {/* <hr />
+                            <h3 className='mt-3 fw-bold text-center'>Detail Laundry</h3>
+                            <table className="table table-bordered mb-3 mt-3">
+                                <thead>
+                                    <tr>
+                                        <th>Package</th>
+                                        <th>Price</th>
+                                        <th>Qty</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.state.detail_transaksi.map((item, index) => (
+                                        <tr key={index}>
+                                            <td>{item.paket.nama_paket}</td>
+                                            <td>Rp {item.paket.harga}</td>
+                                            <td>{item.qty}</td>
+                                            <td className="text-right">Rp {item.subtotal}</td>
+
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table> */}
+
                         </Modal.Body>
                         <Modal.Footer>
                             <Button variant="dark" type="submit" id="blue">
