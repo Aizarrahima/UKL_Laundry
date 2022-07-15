@@ -7,20 +7,19 @@ class Profile extends Component {
     constructor() {
         super()
         this.state = {
-            admin: [],
+            user: [],
             isModalOpen: false,
             token: "",
             userName: "",
-            adminId: 0,
-            id_admin: 0,
-            nama_admin: "",
-            username_admin: "",
-            password_admin: ""
+            id_user: 0,
+            nama_user: "",
+            username_user: "",
+            password_user: ""
         }
         if (localStorage.getItem('token')) {
             this.state.token = localStorage.getItem('token')
-            this.state.adminId = localStorage.getItem('id')
-            // this.state.userName = localStorage.getItem('nama')
+            this.state.id_user = localStorage.getItem('id')
+            this.state.userName = localStorage.getItem('nama')
         } else {
             window.location = '/signin'
         }
@@ -32,43 +31,42 @@ class Profile extends Component {
         })
     }
 
-    getAdmin = () => {
-        let url = `http://localhost:8080/admin/${this.state.adminId}`;
+    getUser = () => {
+        let url = `http://localhost:8080/user/${this.state.id_user}`;
         // mengakses api untuk mengambil data pegawai
         axios.get(url)
             .then(res => {
                 // mengisikan data dari respon API ke array pegawai
                 this.setState({
-                    admin: res.data.data
+                    user: res.data.user
                 })
             })
             .catch(error => {
                 console.log(error);
             });
-        console.log(this.state.admin)
+        console.log(this.state.user)
     }
 
     handleEdit = () => {
         this.setState({
             isModalOpen: true,
-            id_admin: this.state.admin.id_admin,
-            nama_admin: this.state.admin.nama_admin,
-            username_admin: this.state.admin.username_admin,
-            password_admin: this.state.admin.password_admin
+            id_user: this.state.user.id_user,
+            nama_user: this.state.user.nama_user,
+            username_user: this.state.user.username_user,
+            password_user: this.state.user.password_user
         })
     }
 
     handleSave = (e) => {
         e.preventDefault()
         let data = {
-            nama_admin: this.state.nama_admin,
-            username_admin: this.state.username_admin
+            nama_user: this.state.nama_user,
+            username_user: this.state.username_user
         }
-
-        axios.put(`http://localhost:8080/admin/${this.state.adminId}`, data)
+        axios.put(`http://localhost:8080/user/${this.state.id_user}`, data)
             .then(response => {
                 // jika proses simpan berhasil, memanggil data yang terbaru
-                this.getAdmin();
+                this.getUser();
                 this.handleClose()
             })
             .catch(error => {
@@ -84,7 +82,7 @@ class Profile extends Component {
 
     componentDidMount() {
         // method yang pertama kali dipanggil pada saat load page
-        this.getAdmin()
+        this.getUser()
 
     }
 
@@ -98,27 +96,27 @@ class Profile extends Component {
                             <div className="card" id="card-profile">
                                 <div className="card-body ms-3 me-3 mt-4">
                                     <div className="form-group row mb-4">
-                                        <label className="col-sm-2 col-form-label fw-bold">Admin ID</label>
+                                        <label className="col-sm-2 col-form-label fw-bold">User ID</label>
                                         <div className="col-sm-10">
-                                            <input type="number" name="id_admin" class="form-control" value={this.state.adminId} />
+                                            <input type="number" name="id_user" class="form-control" value={this.state.id_user} />
                                         </div>
                                     </div>
                                     <div className="form-group row mb-4">
                                         <label className="col-sm-2 col-form-label fw-bold">Name</label>
                                         <div className="col-sm-10">
-                                            <input type="text" name="nama_admin" class="form-control" value={this.state.admin.nama_admin} />
+                                            <input type="text" name="nama_user" class="form-control" value={this.state.user.nama_user} />
                                         </div>
                                     </div>
                                     <div className="form-group row mb-4">
                                         <label className="col-sm-2 col-form-label fw-bold">Username</label>
                                         <div className="col-sm-10">
-                                            <input type="text" name="username_admin" class="form-control" value={this.state.admin.username_admin} />
+                                            <input type="text" name="username_user" class="form-control" value={this.state.user.username_user} />
                                         </div>
                                     </div>
                                     <div className="form-group row mb-4">
                                         <label className="col-sm-2 col-form-label fw-bold">Password</label>
                                         <div className="col-sm-10">
-                                            <input type="password" name="password_admin" class="form-control" value={this.state.admin.password_admin} />
+                                            <input type="password" name="password_user" class="form-control" value={this.state.user.password_user} />
                                         </div>
                                     </div>
                                     <div className="col text-center mt-4 mb-4">
@@ -138,13 +136,13 @@ class Profile extends Component {
                         <Modal.Body>
                             <Form.Group className="mb-2" controlId="name">
                                 <Form.Label>Nama</Form.Label>
-                                <Form.Control type="text" name="nama_admin" placeholder="Input name"
-                                    value={this.state.nama_admin} onChange={this.handleChange} />
+                                <Form.Control type="text" name="nama_user" placeholder="Input name"
+                                    value={this.state.nama_user} onChange={this.handleChange} />
                             </Form.Group>
                             <Form.Group className="mb-2" controlId="username">
                                 <Form.Label>Username</Form.Label>
-                                <Form.Control type="text" name="username_admin" placeholder="Input address"
-                                    value={this.state.username_admin} onChange={this.handleChange} />
+                                <Form.Control type="text" name="username_user" placeholder="Input username"
+                                    value={this.state.username_user} onChange={this.handleChange} />
                             </Form.Group>
                         </Modal.Body>
                         <Modal.Footer>

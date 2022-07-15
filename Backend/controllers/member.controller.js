@@ -2,84 +2,81 @@
 
 // import
 const db = require("../database")
-const md5 = require("md5")
-const jwt = require("jsonwebtoken")
-const SECRET_KEY = "UKLLAUNDRY"
 
 // endpoint
 module.exports = {
-    // memanggil semua data
+    // memanggil semua member
     getAll: (req, res) => {
         db.query(`select * from member`, (err, result) => {
             if (err) throw err;
             res.json({
-                message: "Berhasil menampilkan semua data",
-                data: result
+                message: "Berhasil menampilkan semua member",
+                member: result
             })
         })
     },
 
-    // memanggil data berdasarkan id
+    // memanggil member berdasarkan id
     getId: (req, res) => {
         const id = req.params.id
         db.query(`select * from member where id_member = '${id}'`, (err, result) => {
             
             if (err) throw err;
             res.json({
-                message: "Berhasil menampilkan data",
-                data: result[0]
+                message: "Berhasil menampilkan member",
+                member: result[0]
             })
         })
     },
 
-    // menambahkan data
+    // menambahkan member
     add: (req, res) => {
-        let data = {
+        let member = {
             nama_member: req.body.nama_member,
             alamat_member: req.body.alamat_member,
             jenis_kelamin: req.body.jenis_kelamin,
             tlp: req.body.tlp
         };
-        if (!data.nama_member, !data.alamat_member, !data.jenis_kelamin || !data.tlp) {
+        if (!member.nama_member, !member.alamat_member, !member.jenis_kelamin || !member.tlp) {
             res.status(402).json({
                 message: "Nama, alamat, jenis kelamin, dan telepon harus diisi!",
             });
         }
-        db.query(`insert into member set ?`, data, (err, result) => {
+        db.query(`insert into member set ?`, member, (err, result) => {
             if (err) throw err;
             res.json({
-                message: "Success added data",
-                data: data
+                message: "Success added member",
+                member: member
             })
         })
     },
 
-    // mengubah data member
+    // mengubah member member
     update: (req, res) => {
         const id = req.params.id;
-        let data = {
+        let member = {
             nama_member: req.body.nama_member,
             alamat_member: req.body.alamat_member,
             jenis_kelamin: req.body.jenis_kelamin,
             tlp: req.body.tlp
         }
-        db.query(`update member set ? where id_member = '${id}'`, data, (err, result) => {
+        db.query(`update member set ? where id_member = '${id}'`, member, (err, result) => {
             if (null, err) throw err;
             res.json({
-                message: "Success update data",
-                data
+                message: "Success update member",
+                member
             })
         })
     },
 
-    // menghapus data
+    // menghapus member
     delete: (req, res) => {
         const id = req.params.id;
         db.query(`delete from member where id_member = '${id}'`, (err, result) => {
             if (null, err) throw err;
             res.json({
-                message: "Success delete data",
-                data: result
+                message: "Success delete member",
+                member: result
             })
         })
     },

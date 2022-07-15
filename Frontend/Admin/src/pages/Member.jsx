@@ -41,7 +41,7 @@ class Member extends React.Component {
         axios.get(url)
             .then(res => {
                 this.setState({
-                    member: res.data.data
+                    member: res.data.member
                 })
                 console.log(this.state.member)
             })
@@ -159,9 +159,11 @@ class Member extends React.Component {
                             <input type="text" name="search" className="form-control my-5 rounded" placeholder="Search Member..." id="search" value={this.state.search} onChange={this.handleChange} onKeyUp={this.findMember} />
 
                         </div>
-                        <div className="col-3 mt-5">
-                            <button className="btn btn-dark" id="btn-blue" onClick={() => this.handleAdd()}>Add Data</button>
-                        </div>
+                        {this.state.role === "admin" &&
+                            <div className="col-3 mt-5">
+                                <button className="btn btn-dark" id="btn-blue" onClick={() => this.handleAdd()}>Add Data</button>
+                            </div>
+                        }
                     </div>
 
 

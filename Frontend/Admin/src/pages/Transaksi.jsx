@@ -12,6 +12,7 @@ class Transaksi extends React.Component {
             member: [],
             outlet: [],
             user: [],
+            detail: [],
             isModalOpen: false,
             token: "",
             userName: "",
@@ -33,13 +34,13 @@ class Transaksi extends React.Component {
             if (localStorage.getItem("role") === "admin" || localStorage.getItem("role") === "kasir") {
                 this.state.token = localStorage.getItem('token')
                 this.state.role = localStorage.getItem('role')
-                this.state.userName = localStorage.getItem('nama')
+                this.state.userName = localStorage.getItem('nama_user')
+                this.state.id_transaksi = localStorage.getItem("id_transaksi")
+                this.state.id_member = localStorage.getItem("id_member")
             }
         } else {
             window.location = '/signin'
         }
-
-        // this.state.id_transaksi = localStorage.getItem("id_transaksi")
         this.state.id_user = localStorage.getItem("id")
     }
 
@@ -60,9 +61,9 @@ class Transaksi extends React.Component {
         axios.get(url)
             .then(res => {
                 this.setState({
-                    transaksi: res.data.data
+                    transaksi: res.data.transaksi
                 })
-                // console.log(this.state.transaksi)
+                console.log(this.state.transaksi)
             })
             .catch(error => {
                 console.log(error)
@@ -86,6 +87,21 @@ class Transaksi extends React.Component {
                     console.log(err.message)
                 })
         }
+    }
+
+    detail = (id_transaksi) => {
+        localStorage.setItem("id_transaksi", id_transaksi)
+        let url = "http://localhost:8080/transaksi/detail/" + id_transaksi
+        axios.get(url)
+            .then(res => {
+                this.setState({
+                    detail: res.data.data
+                })
+                window.location = "/detail/" + id_transaksi
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
 
     handleBayar = (id) => {
@@ -162,7 +178,7 @@ class Transaksi extends React.Component {
         axios.get(url)
             .then(res => {
                 this.setState({
-                    member: res.data.data
+                    member: res.data.member
                 })
             })
             .catch(error => {
@@ -175,7 +191,7 @@ class Transaksi extends React.Component {
         axios.get(url)
             .then(res => {
                 this.setState({
-                    outlet: res.data.data
+                    outlet: res.data.outlet
                 })
             })
             .catch(error => {
@@ -188,13 +204,14 @@ class Transaksi extends React.Component {
         axios.get(url)
             .then(res => {
                 this.setState({
-                    user: res.data.data
+                    user: res.data.user
                 })
             })
             .catch(error => {
                 console.log(error)
             })
     }
+
 
     componentDidMount() {
         this.getTransaksi()
@@ -214,12 +231,12 @@ class Transaksi extends React.Component {
                             <input type="text" name="search" className="form-control my-5 rounded" placeholder="Search transaksi..." id="search" value={this.state.search} onChange={this.handleChange} onKeyUp={this.findTransaksi} />
                         </div> */}
                         {this.state.role === "admin" &&
-                            <div className="col-3 mt-5">
+                            <div className="col-3 my-5">
                                 <NavLink to="/member"><button className="btn btn-dark" id="blue"><i class="fa fa-plus me-2"></i> Add Transaction</button></NavLink>
                             </div>
                         }
                         {this.state.role === "kasir" &&
-                            <div className="col-3 mt-5">
+                            <div className="col-3 my-5">
                                 <NavLink to="/member"><button className="btn btn-dark" id="blue">Add Transaction</button></NavLink>
                             </div>
                         }
@@ -290,7 +307,7 @@ class Transaksi extends React.Component {
                                                 </span>
                                             }
                                             <button className="btn btn-sm btn-dark m-1" id="light" onClick={() => this.handleDrop(item.id_transaksi)}><i className="fa fa-trash"></i></button>
-                                            <button className="btn btn-sm btn-dark m-1" id="light"><i class="fa fa-info"></i></button>
+                                            <button className="btn btn-sm btn-dark m-1" id="light" onClick={() => this.detail(item.id_transaksi)}><i class="fa fa-info"></i></button>
                                         </td>
                                     </tr>
                                 )

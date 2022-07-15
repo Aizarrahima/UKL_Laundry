@@ -125,12 +125,21 @@ h1 {
 }
 
 #cart{
-  margin-left: 350px
+  margin-left: 300px
+}
+
+#cart-owner{
+  margin-left: 400px;
 }
 
 .menu {
   margin-left: 25%;
 }
+
+.menu-owner{
+  margin-left: 50%;
+}
+
 
 .pegawai {
   float: right;

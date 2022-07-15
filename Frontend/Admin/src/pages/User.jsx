@@ -43,7 +43,7 @@ class User extends React.Component {
         axios.get(url)
             .then(res => {
                 this.setState({
-                    user: res.data.data
+                    user: res.data.user
                 })
                 console.log(this.state.user)
             })

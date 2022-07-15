@@ -39,7 +39,7 @@ class Paket extends React.Component {
         axios.get(url)
             .then(res => {
                 this.setState({
-                    paket: res.data.data
+                    paket: res.data.paket
                 })
                 console.log(this.state.paket)
             })
@@ -105,7 +105,7 @@ class Paket extends React.Component {
         // membuat sebuah variabel untuk menampung cart sementara
         let tempCart = []
 
-        // cek elsistensi dari data cart pada localstorage
+        // cek eksistensi dari data cart pada localstorage
         if (localStorage.getItem("cart") !== null) {
             tempCart = JSON.parse(localStorage.getItem("cart"))
             // JSON.parse() digunakan untuk mengonversi dari string -> array object
@@ -124,7 +124,7 @@ class Paket extends React.Component {
                 // jika user memasukkan jumlah item yang dibeli
                 // menambahkan properti "jumlahBeli" pada item yang dipilih
                 selectedItem.qty = promptJumlah
-                selectedItem.total = selectedItem.harga * promptJumlah
+                selectedItem.sub_total = selectedItem.harga * promptJumlah
                 // masukkan item yang dipilih ke dalam cart
                 tempCart.push(selectedItem)
                 // simpan array tempCart ke localStorage
@@ -178,9 +178,11 @@ class Paket extends React.Component {
                             <input type="text" name="search" className="form-control my-5 rounded" placeholder="Search paket..." id="search" value={this.state.search} onChange={this.handleChange} onKeyUp={this.findPaket} />
 
                         </div>
-                        <div className="col-3 mt-5">
-                            <button className="btn btn-dark" id="btn-blue" onClick={() => this.handleAdd()}>Add Data</button>
-                        </div>
+                        {this.state.role === "admin" &&
+                            <div className="col-3 mt-5">
+                                <button className="btn btn-dark" id="btn-blue" onClick={() => this.handleAdd()}>Add Data</button>
+                            </div>
+                        }
                     </div>
 
 

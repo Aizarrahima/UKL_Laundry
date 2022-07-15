@@ -10,74 +10,74 @@ const db = require("../database")
 
 // endpoint
 module.exports = {
-    // menampilkan semua data
+    // menampilkan semua outlet
     getAll: (req, res) => {
         db.query(`select * from outlet`, (err, results) => {
             if (err) throw err;
             res.json({
-                message: "Berhasil menampilkan semua data",
-                data: results,
+                message: "Berhasil menampilkan semua outlet",
+                outlet: results,
             });
         });
     },
 
-    // menampilkan data berdasarkan id
+    // menampilkan outlet berdasarkan id
     getId: (req, res) => {
         const id = req.params.id
         db.query(`select * from outlet where id_outlet = ${id}`, (err, results) => {
             const outlet = results[0];
             if (err) throw err;
             res.json({
-                message: "Berhasil menampilkan data",
-                data: outlet,
+                message: "Berhasil menampilkan outlet",
+                outlet: outlet,
             });
         });
     },
 
-    // menambahkan data
+    // menambahkan outlet
     add: (req, res) => {
-        let data = {
+        let outlet = {
             alamat: req.body.alamat,
             telp: req.body.telp,
         };
-        if (!data.alamat || !data.telp) {
+        if (!outlet.alamat || !outlet.telp) {
             res.status(402).json({
                 message: "alamat dan telepon harus diisi!",
             });
         }
-        db.query(`insert into outlet set ?`, data, (err, result) => {
+        db.query(`insert into outlet set ?`, outlet, (err, result) => {
             if (err) throw err;
             res.json({
-                message: "Success added data",
-                data: data,
+                message: "Success added outlet",
+                outlet: outlet,
             });
         });
     },
 
-    // update data
+    // update outlet
     update: (req, res) => {
         const id = req.params.id;
-        let data = {
+        let outlet = {
             alamat: req.body.alamat,
             telp: req.body.telp
         }
-        db.query(`update outlet set ? where id_outlet = ${id}`, data, (err, result) => {
+        db.query(`update outlet set ? where id_outlet = ${id}`, outlet, (err, result) => {
             if (null, err) throw err;
             res.json({
-                message: "Succes update data",
-                data,
+                message: "Succes update outlet",
+                outlet,
             })
         })
     },
 
-    // hapus data
+    // hapus outlet
     delete: (req, res) => {
         const id = req.params.id;
         db.query(`delete from outlet where id_outlet = ${id}`, (err, results) => {
             if (null, err) throw err;
             res.json({
-                message: "Success delete data",
-                data: results,
+                message: "Success delete outlet",
+                outlet: results,
             })
         })
     },

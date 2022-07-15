@@ -25,9 +25,6 @@ app.get("/", (req, res) => {
     });
 });
 
-app.use("/admin", require("./routes/admin.route"));
-app.use("/kasir", require("./routes/kasir.route"));
-app.use("/owner", require("./routes/owner.route"));
 app.use("/paket", require("./routes/paket.route"));
 app.use("/outlet", require("./routes/outlet.route"));
 app.use("/member", require("./routes/member.route"));

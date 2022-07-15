@@ -29,12 +29,12 @@ export default class Login extends React.Component {
         axios.post(url, data)
             .then(res => {
                 if (res.data.logged === true) {
-                    let nama = res.data.data.nama_user
-                    let role = res.data.data.role
-                    let user = res.data.data
+                    let nama = res.data.user.nama_user
+                    let role = res.data.user.role
+                    let user = res.data.user
                     let token = res.data.token
-                    let id = res.data.data.id_user
-                    localStorage.setItem("nama", nama)
+                    let id = res.data.user.id_user
+                    localStorage.setItem("nama_user", nama)
                     localStorage.setItem("id", id)
                     localStorage.setItem("user", JSON.stringify(user))
                     localStorage.setItem("token", token)

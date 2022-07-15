@@ -10,74 +10,74 @@ const db = require("../database")
 
 // endpoint
 module.exports = {
-    // menampilkan semua data
+    // menampilkan semua paket
     getAll: (req, res) => {
         db.query(`select * from paket`, (err, results) => {
             if (err) throw err;
             res.json({
-                message: "Berhasil menampilkan semua data",
-                data: results,
+                message: "Berhasil menampilkan semua paket",
+                paket: results,
             });
         });
     },
 
-    // menampilkan data berdasarkan id
+    // menampilkan paket berdasarkan id
     getId: (req, res) => {
         const id = req.params.id
         db.query(`select * from paket where id_paket = ${id}`, (err, results) => {
             const paket = results[0];
             if (err) throw err;
             res.json({
-                message: "Berhasil menampilkan data",
-                data: paket,
+                message: "Berhasil menampilkan paket",
+                paket: paket,
             });
         });
     },
 
-    // menambahkan data
+    // menambahkan paket
     add: (req, res) => {
-        let data = {
+        let paket = {
             jenis: req.body.jenis,
             harga: req.body.harga,
         };
-        if (!data.jenis || !data.harga) {
+        if (!paket.jenis || !paket.harga) {
             res.status(402).json({
                 message: "Jenis dan Harga harus diisi!",
             });
         }
-        db.query(`insert into paket set ?`, data, (err, result) => {
+        db.query(`insert into paket set ?`, paket, (err, result) => {
             if (err) throw err;
             res.json({
-                message: "Success added data",
-                data: data,
+                message: "Success added paket",
+                paket: paket,
             });
         });
     },
 
-    // update data
+    // update paket
     update: (req, res) => {
         const id = req.params.id;
-        let data = {
+        let paket = {
             jenis: req.body.jenis,
             harga: req.body.harga
         }
-        db.query(`update paket set ? where id_paket = ${id}`, data, (err, result) => {
+        db.query(`update paket set ? where id_paket = ${id}`, paket, (err, result) => {
             if (null, err) throw err;
             res.json({
-                message: "Succes update data",
-                data,
+                message: "Succes update paket",
+                paket,
             })
         })
     },
 
-    // hapus data
+    // hapus paket
     delete: (req, res) => {
         const id = req.params.id;
         db.query(`delete from paket where id_paket = ${id}`, (err, results) => {
             if (null, err) throw err;
             res.json({
-                message: "Success delete data",
-                data: results,
+                message: "Success delete paket",
+                paket: results,
             })
         })
     },

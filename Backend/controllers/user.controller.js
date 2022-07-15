@@ -8,78 +8,78 @@ const SECRET_KEY = "UKLLAUNDRY"
 
 // endpoint
 module.exports = {
-    // menampilkan semua data user
+    // menampilkan semua user user
     getAll: (req, res) => {
         db.query(`select * from user`, (err, results) => {
             if (err) throw err;
             res.json({
-                message: "Berhasil menampilkan semua data",
-                data: results
+                message: "Berhasil menampilkan semua user",
+                user: results
             });
         });
     },
 
-    // menampilkan data berdasarkan id_user
+    // menampilkan user berdasarkan id_user
     getId: (req, res) => {
         const id = req.params.id;
         db.query(`select * from user where id_user = '${id}'`, (err, results) => {
             const user = results[0];
             if (err) throw err;
             res.json({
-                message: "Berhasil menampilkan data",
-                data: user
+                message: "Berhasil menampilkan user",
+                user: user
             });
         });
     },
 
-    // menambahkan data
+    // menambahkan user
     add: (req, res) => {
-        let data = {
+        let user = {
             nama_user: req.body.nama_user,
             username_user: req.body.username_user,
             password_user: md5(req.body.password_user),
             role: req.body.role,
         };
-        if (!data.nama_user, !data.username_user, !data.password_user || !data.role) {
+        if (!user.nama_user, !user.username_user, !user.password_user || !user.role) {
             res.json({
                 message: "Nama, Username, dan Password harus diisi!",
             });
         }
-        db.query(`insert into user set ?`, data, (err, result) => {
+        db.query(`insert into user set ?`, user, (err, result) => {
             if (err) throw err;
             res.json({
-                message: "Success added data",
-                data: data,
+                message: "Success added user",
+                user: user,
             })
         })
     },
 
-    // update data 
+    // update user 
     update: (req, res) => {
         const id = req.params.id;
-        let data = {
+        let user = {
             nama_user: req.body.nama_user,
             username_user: req.body.username_user,
             password_user: md5(req.body.password_user),
             role: req.body.role,
         };
-        db.query(`update user set ? where id_user = ${id}`, data, (err, result) => {
+        db.query(`update user set ? where id_user = ${id}`, user, (err, result) => {
             if (err) throw err;
             res.json({
-                message: "Success update data",
-                data: data
+                message: "Success update user",
+                user: user
             });
         });
     },
 
-    // hapus data
+    // hapus user
     delete: (req, res) => {
         const id = req.params.id;
         db.query(`delete from user where id_user = '${id}'`, (err, results) => {
             if (null, err) throw err;
             res.json({
-                message: "Success delete data",
-                data: results,
+                message: "Success delete user",
+                user: results,
             })
         })
     },
@@ -100,10 +100,10 @@ module.exports = {
                     res.status(401).json({ message: "User not fond" });
                 } else {
                     if (user.password_user === md5(password_user)) {
-                        const token = jwt.sign({ data: user }, SECRET_KEY);
+                        const token = jwt.sign({ user: user }, SECRET_KEY);
                         res.json({
                             logged: true,
-                            data: user,
+                            user: user,
                             token: token,
                         });
                     } else {
@@ -148,7 +148,7 @@ module.exports = {
             if (null, err) throw err;
             res.json({
                 message: "Berhasil ubah password",
-                data: results,
+                user: results,
             })
         })
     },
@@ -165,7 +165,7 @@ module.exports = {
             if (null, err) throw err;
             res.json({
                 message: "Berhasil ubah password",
-                data: results
+                user: results
             })
         })
     }

@@ -39,7 +39,7 @@ class Outlet extends React.Component {
         axios.get(url)
             .then(res => {
                 this.setState({
-                    outlet: res.data.data
+                    outlet: res.data.outlet
                 })
                 console.log(this.state.outlet)
             })

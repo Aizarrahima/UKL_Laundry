@@ -6,15 +6,14 @@ import Signup from './Signup';
 import Dashboard from './Dashboard';
 import Outlet from './Outlet';
 import Paket from './Paket';
-import Admin from './Admin';
-import Kasir from './Kasir';
-import Owner from './Owner';
 import Member from './Member';
 import Profile from './Profile';
 import Cart from './Cart';
 import User from './User';
-import Checkout from './Checkout';
 import Transaksi from './Transaksi';
+import DetailTransaksi from './DetailTransaksi';
+import Invoice from './Invoice';
+import Laporan from './Laporan';
 
 const Main = () => {
     return (
@@ -24,15 +23,14 @@ const Main = () => {
             <Route exact path='/' element={<Dashboard />} />
             <Route exact path='/outlet' element={<Outlet />} />
             <Route exact path='/paket' element={<Paket />} />
-            <Route exact path='/admin' element={<Admin />} />
-            <Route exact path='/kasir' element={<Kasir />} />
-            <Route exact path='/owner' element={<Owner />} />
             <Route exact path='/user' element={<User />} />
             <Route exact path='/member' element={<Member />} />
             <Route exact path='/profile' element={<Profile />} />
             <Route exact path='/cart' element={<Cart />} />
-            <Route exact path='/checkout' element={<Checkout />} />
             <Route exact path='/transaksi' element={<Transaksi />} />
+            <Route exact path='/detail/:id_transaksi' element={<DetailTransaksi />} />
+            <Route exact path='/invoice/:id_transaksi' element={<Invoice />} />
+            <Route exact path='/laporan' element={<Laporan />} />
         </Routes>
     );
 }
