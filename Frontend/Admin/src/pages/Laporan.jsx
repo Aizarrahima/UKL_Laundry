@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import { NavLink } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
 class Laporan extends React.Component {
@@ -22,27 +21,14 @@ class Laporan extends React.Component {
     }
 
     laporanTransaksi = () => {
-        let url = "http://localhost:8080/transaksi/laporanTransaksi"
+        let url = "http://localhost:8080/transaksi/laporan"
         axios.get(url)
             .then(res => {
                 this.setState({
-                    laporanTransaksi: res.data.laporan
+                    laporanTransaksi: res.data.laporan,
+                    // laporanDetail: res.data.laporan[0]
                 })
                 console.log(this.state.laporanTransaksi)
-            })
-            .catch(error => [
-                console.log(error)
-            ])
-    }
-    
-    laporanDetail = () => {
-        let url = "http://localhost:8080/transaksi/laporanDetail"
-        axios.get(url)
-            .then(res => {
-                this.setState({
-                    laporanDetail: res.data.laporan
-                })
-                console.log(this.state.laporanDetail)
             })
             .catch(error => [
                 console.log(error)
@@ -56,7 +42,6 @@ class Laporan extends React.Component {
 
     componentDidMount() {
         this.laporanTransaksi()
-        this.laporanDetail()
     }
 
     render() {
@@ -76,10 +61,10 @@ class Laporan extends React.Component {
                                 <th>Nama User</th>
                                 <th>Telepon Member</th>
                                 <th>Alamat Member</th>
-                                <th>Paket</th>
+                                {/* <th>Paket</th>
                                 <th>Qty</th>
                                 <th>Harga</th>
-                                <th>Sub Total</th>
+                                <th>Sub Total</th> */}
                                 <th>Total</th>
                             </tr>
                         </thead>
@@ -93,18 +78,18 @@ class Laporan extends React.Component {
                                     <td>{item.nama_user}</td>
                                     <td>{item.tlp}</td>
                                     <td>{item.alamat_member}</td>
-                                    <td>
+                                    {/* <td>
                                         <ol>
-                                            {/* {item.laporanDetail.map((it, index) => { */}
-                                                {/* return ( */}
+                                            {this.state.laporanTransaksi.map((item, index) => {
+                                                return (
                                                     <li>{index + 1}. {item.jenis}</li>
-                                                {/* )
-                                            })} */}
+                                                )
+                                             })}
                                         </ol>
                                     </td>
                                     <td>{item.qty}</td>
                                     <td className="text-left">Rp {item.harga}</td>
-                                    <td className="text-left">Rp {item.sub_total}</td>
+                                    <td className="text-left">Rp {item.sub_total}</td> */}
                                     <td className="text-left">Rp {item.total}</td>
                                 </tr>
                             ))}

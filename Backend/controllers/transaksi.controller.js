@@ -85,7 +85,7 @@ module.exports = {
     // memanggil data detail_transaksi
     getDetail: (req, res) => {
         const id_transaksi = req.params.id_transaksi
-        db.query(`select * from transaksi join detail_transaksi on transaksi.id_transaksi = detail_transaksi.id_transaksi where detail_transaksi.id_transaksi = ${id_transaksi}`, (err, result) => {
+        db.query(`select * from transaksi join detail_transaksi on transaksi.id_transaksi = detail_transaksi.id_transaksi join paket on detail_transaksi.id_paket = paket.id_paket where detail_transaksi.id_transaksi = ${id_transaksi}`, (err, result) => {
             if (err) throw err;
             res.json({
                 message: "Data detail transaksi",
@@ -94,24 +94,14 @@ module.exports = {
         })
     },
 
-    laporanTransaksi: (req, res) => {
-        db.query(`select * from transaksi join detail_transaksi on transaksi.id_transaksi = detail_transaksi.id_transaksi join paket on detail_transaksi.id_paket = paket.id_paket join member on transaksi.id_member = member.id_member join user on transaksi.id_user = user.id_user`, (err, result) => {
+    laporan: (req, res) => {
+        db.query(`select * from transaksi LEFT join detail_transaksi on transaksi.id_transaksi = detail_transaksi.id_transaksi join paket on detail_transaksi.id_paket = paket.id_paket join member on transaksi.id_member = member.id_member join user on transaksi.id_user = user.id_user GROUP BY detail_transaksi.id_transaksi;`, (err, result) => {
             if (err) throw err;
             res.json({
                 message: "laporan",
                 laporan: result
             })
         })  
-    },
-
-    laporanDetail: (req, res) => {
-        db.query(`select * from detail_transaksi join paket on detail_transaksi.id_paket = paket.id_paket`, (err, result) => {
-            if (err) throw err;
-            res.json({
-                message: "laporan detail",
-                laporan: result
-            })
-        })
     },
 
     // hapus data

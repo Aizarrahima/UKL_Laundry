@@ -17,6 +17,7 @@ class Paket extends React.Component {
         }
         if (localStorage.getItem('token')) {
             this.state.token = localStorage.getItem('token')
+            this.state.role = localStorage.getItem("role")
         } else {
             window.location = '/signin'
         }

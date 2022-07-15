@@ -55,13 +55,13 @@ export default class Login extends React.Component {
                     </div>
                     <div className='p-4 flex flex-col justify-around'>
                         <form onSubmit={(e) => this.handleLogin(e)}>
-                            <h2 className='text-4xl font-bold text-center mb-8'>Laundry App</h2>
+                            <h2 className='text-4xl font-bold text-center mb-8'>Purple Laundry</h2>
                             <div>
                                 <input className='border py-2 my-4 w-full' type="text" name="username_user" placeholder='Username' value={this.state.username_user} onChange={this.handleChange} required/>
                                 <input className='border p-2 w-full' type="password" name="password_user" value={this.state.password_user} onChange={this.handleChange} placeholder='Password' required/>
                             </div>
                             <button type="submit" className='w-full py-2 my-4 bg-violet-700 hover:bg-violet-600 text-white font-bold'>Sign In</button>
-                            <h6 className='text-center'><NavLink to="/forgotPassword" id="cr-account">Forgot Username or Password?</NavLink></h6>
+                            {/* <h6 className='text-center'><NavLink to="/forgotPassword" id="cr-account">Forgot Username or Password?</NavLink></h6> */}
                         </form>
                         {/* <h6 className='text-center'>Don't have an account? <NavLink to="/signup" id="cr-account">Sign Up</NavLink></h6> */}
                     </div>

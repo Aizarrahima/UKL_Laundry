@@ -28,7 +28,6 @@ class Transaksi extends React.Component {
             nama_member: "",
             nama_user: "",
             now: new Date(),
-            // search: "",
         }
         if (localStorage.getItem('token')) {
             if (localStorage.getItem("role") === "admin" || localStorage.getItem("role") === "kasir") {
@@ -89,8 +88,9 @@ class Transaksi extends React.Component {
         }
     }
 
-    detail = (id_transaksi) => {
+    detail = (id_transaksi, id_member) => {
         localStorage.setItem("id_transaksi", id_transaksi)
+        localStorage.setItem("id_member", id_member)
         let url = "http://localhost:8080/transaksi/detail/" + id_transaksi
         axios.get(url)
             .then(res => {
@@ -111,26 +111,6 @@ class Transaksi extends React.Component {
                 console.log(res.data.message)
             })
     }
-
-    // findTransaksi = (event) => {
-    //     let url = "http://localhost:8080/transaksi/find";
-    //     if (event.keyCode === 13) {
-    //         // menampung data keyword pencarian
-    //         let form = {
-    //             find: this.state.search
-    //         }
-    //         // mengakses api untuk mengambil data pegawai
-    //         // berdasarkan keyword
-    //         axios.post(url, form)
-    //             .then(response => {
-    //                 // mengisikan data dari respon API ke array pegawai
-    //                 this.setState({ transaksi: response.data.result });
-    //             })
-    //             .catch(error => {
-    //                 console.log(error);
-    //             });
-    //     }
-    // }
 
     handleEdit = (item) => {
         console.log({ item }, this.state)
@@ -227,9 +207,6 @@ class Transaksi extends React.Component {
                 <div className="container my-2 py-5">
                     <h1 className="display-6 fw-light text-left">Transaction</h1>
                     <div className="row">
-                        {/* <div className="col-6 mb-1">
-                            <input type="text" name="search" className="form-control my-5 rounded" placeholder="Search transaksi..." id="search" value={this.state.search} onChange={this.handleChange} onKeyUp={this.findTransaksi} />
-                        </div> */}
                         {this.state.role === "admin" &&
                             <div className="col-3 my-5">
                                 <NavLink to="/member"><button className="btn btn-dark" id="blue"><i class="fa fa-plus me-2"></i> Add Transaction</button></NavLink>
@@ -237,7 +214,7 @@ class Transaksi extends React.Component {
                         }
                         {this.state.role === "kasir" &&
                             <div className="col-3 my-5">
-                                <NavLink to="/member"><button className="btn btn-dark" id="blue">Add Transaction</button></NavLink>
+                                <NavLink to="/member"><button className="btn btn-dark" id="blue"><i class="fa fa-plus me-2"></i>Add Transaction</button></NavLink>
                             </div>
                         }
                     </div>
@@ -307,7 +284,7 @@ class Transaksi extends React.Component {
                                                 </span>
                                             }
                                             <button className="btn btn-sm btn-dark m-1" id="light" onClick={() => this.handleDrop(item.id_transaksi)}><i className="fa fa-trash"></i></button>
-                                            <button className="btn btn-sm btn-dark m-1" id="light" onClick={() => this.detail(item.id_transaksi)}><i class="fa fa-info"></i></button>
+                                            <button className="btn btn-sm btn-dark m-1" id="light" onClick={() => this.detail(item.id_transaksi, item.id_member)}><i class="fa fa-info"></i></button>
                                         </td>
                                     </tr>
                                 )
@@ -356,31 +333,6 @@ class Transaksi extends React.Component {
                                     <option value="diambil">diambil</option>
                                 </Form.Select>
                             </Form.Group>
-
-                            {/* <hr />
-                            <h3 className='mt-3 fw-bold text-center'>Detail Laundry</h3>
-                            <table className="table table-bordered mb-3 mt-3">
-                                <thead>
-                                    <tr>
-                                        <th>Package</th>
-                                        <th>Price</th>
-                                        <th>Qty</th>
-                                        <th>Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {this.state.detail_transaksi.map((item, index) => (
-                                        <tr key={index}>
-                                            <td>{item.paket.nama_paket}</td>
-                                            <td>Rp {item.paket.harga}</td>
-                                            <td>{item.qty}</td>
-                                            <td className="text-right">Rp {item.subtotal}</td>
-
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table> */}
-
                         </Modal.Body>
                         <Modal.Footer>
                             <Button variant="dark" type="submit" id="blue">

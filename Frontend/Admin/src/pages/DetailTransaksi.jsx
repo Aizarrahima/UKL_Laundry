@@ -146,24 +146,24 @@ class DetailTransaksi extends React.Component {
                         <thead>
                             <tr>
                                 <th>Paket</th>
-                                {/* <th>Harga</th> */}
                                 <th>Qty</th>
+                                <th>Harga</th>
                                 <th>Total</th>
                             </tr>
                         </thead>
                         <tbody>
                             {this.state.transaksi.map((item, index) => (
                                 <tr key={index}>
-                                    <td>{item.id_paket}</td>
-                                    {/* <td>Rp {item.harga}</td> */}
+                                    <td>{item.jenis}</td>
                                     <td>{item.qty}</td>
+                                    <td>Rp {item.harga}</td>
                                     <td className="text-left">Rp {item.sub_total}</td>
 
                                 </tr>
                             ))}
                             <tr>
-                                <td colSpan="2" className="align-self-end">Total</td>
-                                <td className="text-left" colSpan={2}>Rp {this.state.detail_transaksi.total}</td>
+                                <td colSpan="3" className="align-self-end">Total</td>
+                                <td className="text-left" colSpan={3}>Rp {this.state.detail_transaksi.total}</td>
                             </tr>
                         </tbody>
                     </table>
