@@ -36,6 +36,9 @@ class Transaksi extends React.Component {
                 this.state.userName = localStorage.getItem('nama_user')
                 this.state.id_transaksi = localStorage.getItem("id_transaksi")
                 this.state.id_member = localStorage.getItem("id_member")
+            } else {
+                window.alert("You're not kasir or admin!")
+                window.location = '/'
             }
         } else {
             window.location = '/signin'

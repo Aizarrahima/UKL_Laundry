@@ -18,8 +18,13 @@ class Member extends React.Component {
             search: "",
         }
         if (localStorage.getItem('token')) {
-            this.state.token = localStorage.getItem('token')
-            this.state.role = localStorage.getItem('role')
+            if (localStorage.getItem("role") === "kasir" || localStorage.getItem("role") === "admin") {
+                this.state.token = localStorage.getItem('token')
+                this.state.role = localStorage.getItem("role")
+            } else {
+                window.alert("You're not kasir or admin!")
+                window.location ='/'
+            }
         } else {
             window.location = '/signin'
         }

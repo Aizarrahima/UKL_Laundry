@@ -8,24 +8,18 @@ class Dashboard extends React.Component {
         this.state = {
             token: "",
             userName: "",
-            adminId: 0,
+            id_user: 0,
             role: ""
         }
         if (localStorage.getItem('token')) {
             this.state.token = localStorage.getItem('token')
-            this.state.userName = localStorage.getItem('nama')
+            this.state.userName = localStorage.getItem('nama_user')
             this.state.role = localStorage.getItem("role")
         } else {
             window.location = '/signin'
         }
     }
 
-    headerConfig = () => {
-        let header = {
-            headers: { Authorization: `Bearer ${this.state.token}` }
-        }
-        return header
-    }
     render() {
         return (
             <div>

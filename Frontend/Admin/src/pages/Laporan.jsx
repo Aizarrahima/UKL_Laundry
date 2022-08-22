@@ -8,25 +8,32 @@ class Laporan extends React.Component {
         this.state = {
             laporanTransaksi: [],
             laporanDetail: [],
+            id_transaksi: 0,
             token: "",
             role: "",
             nama: "",
         }
         if (localStorage.getItem("token")) {
-                this.state.role = localStorage.getItem("role")
-                this.state.token = localStorage.getItem("token")
+            this.state.role = localStorage.getItem("role")
+            this.state.token = localStorage.getItem("token")
         } else {
             window.location = "/signin"
         }
     }
 
+    headerConfig = () => {
+        let header = {
+            headers: { Authorization: `Bearer ${this.state.token}` }
+        }
+        return header
+    }
+
     laporanTransaksi = () => {
-        let url = "http://localhost:8080/transaksi/laporan"
-        axios.get(url)
+        let url = `http://localhost:8080/transaksi/laporan/`
+        axios.get(url, this.headerConfig())
             .then(res => {
                 this.setState({
-                    laporanTransaksi: res.data.laporan,
-                    // laporanDetail: res.data.laporan[0]
+                    laporanTransaksi: res.data.laporan
                 })
                 console.log(this.state.laporanTransaksi)
             })
@@ -78,18 +85,42 @@ class Laporan extends React.Component {
                                     <td>{item.nama_user}</td>
                                     <td>{item.tlp}</td>
                                     <td>{item.alamat_member}</td>
-                                    {/* <td>
+                                    {/*<td>
                                         <ol>
-                                            {this.state.laporanTransaksi.map((item, index) => {
+                                            {item.state.map((item, index) => {
                                                 return (
                                                     <li>{index + 1}. {item.jenis}</li>
                                                 )
-                                             })}
+                                            })} 
                                         </ol>
                                     </td>
-                                    <td>{item.qty}</td>
-                                    <td className="text-left">Rp {item.harga}</td>
-                                    <td className="text-left">Rp {item.sub_total}</td> */}
+                                     <td>
+                                        <ol>
+                                             {item.laporanTransaksi.map((item, index) => {
+                                                return ( 
+                                            <li>{item.qty}</li>
+                                             )
+                                             })} 
+                                        </ol>
+                                    </td>
+                                    <td>
+                                        <ol>
+                                            {item.laporanTransaksi.map((item, index) => {
+                                                return ( 
+                                            <li>Rp{item.harga}</li>
+                                             )
+                                             })} 
+                                        </ol>
+                                    </td>
+                                    <td>
+                                        <ol>
+                                             {this.state.laporanTransaksi.map((item, index) => {
+                                                return ( 
+                                            <li>Rp{item.sub_total}</li>
+                                            )
+                                             })}
+                                        </ol>
+                                    </td> */}
                                     <td className="text-left">Rp {item.total}</td>
                                 </tr>
                             ))}

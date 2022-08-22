@@ -19,9 +19,14 @@ class User extends React.Component {
             isModalPw: false
         }
         if (localStorage.getItem('token')) {
-            this.state.token = localStorage.getItem('token')
+            if (localStorage.getItem("role") === "kasir" || localStorage.getItem("role") === "admin") {
+                this.state.token = localStorage.getItem('token')
+            } else {
+                window.alert("You're not kasir or admin!")
+                window.location = '/'
+            }
         } else {
-            window.location = '/login'
+            window.location = '/signin'
         }
     }
 

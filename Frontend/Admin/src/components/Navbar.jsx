@@ -66,8 +66,8 @@ export default class Navbar extends Component {
                                         <div className="menu-owner flex space-x-2 ml-10 ">
                                             <NavLink to="/" className="no-underline ml-20 text-gray-800 hover:bg-purple-800 hover:text-white px-3 py-3 rounded-md text-sm font-medium " aria-current="page">Dashboard</NavLink>
                                             <NavLink to="/laporan" className="no-underline text-gray-800 hover:bg-purple-800 hover:text-white px-3 py-3 rounded-md text-sm font-medium " aria-current="page">Laporan</NavLink>
-                                            <NavLink to="/cart" className="no-underline text-gray-800 hover:text-purple-800 px-3 py-2 rounded-md text-2xl font-medium" aria-current="page" id="cart-owner"><i className="fa fa-shopping-cart me-1 "></i></NavLink>
-                                            <NavLink to="/profile" className="no-underline text-gray-800 hover:text-purple-800 px-3 py-2 rounded-md text-2xl font-medium" aria-current="page" id="profile"><i className="fa fa-user me-1 "></i></NavLink>
+                                            {/* <NavLink to="/cart" className="no-underline text-gray-800 hover:text-purple-800 px-3 py-2 rounded-md text-2xl font-medium" aria-current="page" id="cart-owner"><i className="fa fa-shopping-cart me-1 "></i></NavLink> */}
+                                            <NavLink to="/profile" className="no-underline text-gray-800 hover:text-purple-800 px-3 py-2 rounded-md text-2xl font-medium" aria-current="page" id="profile-owner"><i className="fa fa-user me-1 "></i></NavLink>
                                             <button onClick={() => this.out()} className="no-underline text-gray-800 px-3 py-2 hover:text-purple-800 rounded-md text-2xl font-medium" aria-current="page" ><i className="fa fa-sign-out me-1 "></i></button>
                                         </div>
                                     </div>

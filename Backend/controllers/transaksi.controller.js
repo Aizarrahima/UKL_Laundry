@@ -95,7 +95,7 @@ module.exports = {
     },
 
     laporan: (req, res) => {
-        db.query(`select * from transaksi LEFT join detail_transaksi on transaksi.id_transaksi = detail_transaksi.id_transaksi join paket on detail_transaksi.id_paket = paket.id_paket join member on transaksi.id_member = member.id_member join user on transaksi.id_user = user.id_user GROUP BY detail_transaksi.id_transaksi;`, (err, result) => {
+        db.query(`select detail_transaksi.id_detail_transaksi, transaksi.id_transaksi, transaksi.tgl, member.nama_member, user.nama_user, member.tlp, member.alamat_member, paket.jenis, detail_transaksi.qty, paket.harga, detail_transaksi.sub_total, transaksi.total from transaksi LEFT join detail_transaksi on transaksi.id_transaksi = detail_transaksi.id_transaksi join paket on detail_transaksi.id_paket = paket.id_paket join member on transaksi.id_member = member.id_member join user on transaksi.id_user = user.id_user GROUP BY detail_transaksi.id_transaksi;`, (err, result) => {
             if (err) throw err;
             res.json({
                 message: "laporan",

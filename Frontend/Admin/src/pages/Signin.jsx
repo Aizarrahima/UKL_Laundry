@@ -63,7 +63,7 @@ export default class Login extends React.Component {
                             <button type="submit" className='w-full py-2 my-4 bg-violet-700 hover:bg-violet-600 text-white font-bold'>Sign In</button>
                             {/* <h6 className='text-center'><NavLink to="/forgotPassword" id="cr-account">Forgot Username or Password?</NavLink></h6> */}
                         </form>
-                        {/* <h6 className='text-center'>Don't have an account? <NavLink to="/signup" id="cr-account">Sign Up</NavLink></h6> */}
+                        <h6 className='text-center'>Don't have an account? <NavLink to="/signup" id="cr-account">Sign Up</NavLink></h6>
                     </div>
                 </div>
             </div>
